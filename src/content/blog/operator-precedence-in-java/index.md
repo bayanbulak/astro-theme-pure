@@ -23,12 +23,12 @@ language: 'English'
 | **8**  | `==` `!=`                                              | equality                                                     | left-to-right |
 | **7**  | `&`                                                    | bitwise AND                                                  | left-to-right |
 | **6**  | `^`                                                    | bitwise XOR                                                  | left-to-right |
-| **5**  | `|`                                                    | bitwise OR                                                   | left-to-right |
+| **5**  | `\|`                                                    | bitwise OR                                                   | left-to-right |
 | **4**  | `&&`                                                   | logical AND                                                  | left-to-right |
-| **3**  | `||`                                                   | logical OR                                                   | left-to-right |
+| **3**  | `\|\|`                                                   | logical OR                                                   | left-to-right |
 | **2**  | `?:`                                                   | ternary                                                      | right-to-left |
-| **1**  |`=` `+=` `-=` `*=` `/=` `%=` `&=` `^=` `|=` `<<=` `>>=` `>>>=` | assignment                                                   | right-to-left |
-| **0**  | `->`                                                   | lambda expression arrow                                      | right-to-left |
+| **1**  |`=` `+=` `-=` `*=` `/=` `%=` `&=` `^=` `\|=` `<<=` `>>=` `>>>=` | assignment                                                   | right-to-left |
+| **0**  | `->`<br>`->`                                                   | lambda expression<br>switch expression| right-to-left |
 
 # See Also
 
