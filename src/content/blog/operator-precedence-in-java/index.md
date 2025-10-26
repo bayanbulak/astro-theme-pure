@@ -10,6 +10,7 @@ language: 'English'
 
 
 # Operator Precedence in Java
+
 | Level  | Operator                                               | Description                                                  | Associativity |
 | ------ | ------------------------------------------------------ | ------------------------------------------------------------ | ------------- |
 | **16** | `()` `[]` `.`                                          | parentheses array access member access                       | left-to-right |
