@@ -8,8 +8,7 @@ heroImage: { src: './thumbnail.jpg', color: '#64574D' }
 language: 'English'
 ---
 
-
-# Operator Precedence in Java
+## Operator Precedence in Java
 
 | Level  | Operator                                               | Description                                                  | Associativity |
 | ------ | ------------------------------------------------------ | ------------------------------------------------------------ | ------------- |
@@ -31,6 +30,6 @@ language: 'English'
 | **1**  |`=` `+=` `-=` `*=` `/=` `%=` `&=` `^=` `\|=` `<<=` `>>=` `>>>=` | assignment                                                   | right-to-left |
 | **0**  | `->`<br>`->`                                                   | lambda expression<br>switch expression| right-to-left |
 
-# See Also
+## See Also
 
 * [Operator Precedence in Java, princeton](https://introcs.cs.princeton.edu/java/11precedence/)
