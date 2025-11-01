@@ -38,9 +38,9 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
             <Icon name='location' class='size-5' slot='icon' />
           </Label>
           <Label
-            title='Source code'
+            title='bayanbulak'
             as='a'
-            href='https://github.com/cworld1/astro-theme-pure'
+            href='https://github.com/bayanbulak'
             target='_blank'
           >
             <Icon name='github' class='size-5' slot='icon' />
@@ -130,15 +130,19 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
             class='absolute end-0 z-0 m-0 -my-3 h-full w-1/2 object-cover opacity-40'
             src='/images/sjtu.png'
           />
-          {
-            /* <ul class='ms-4 list-disc text-muted-foreground'>
-          <li>
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore debitis recusandae, ut
-            molestiae laboriosam pariatur!
-          </li>
-          <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae, pariatur!</li>
-        </ul> */
-          }
+        </Card>
+
+        <Card
+          as='a'
+          heading='Hefei University of Techology'
+          subheading='Bachelor of Engineering'
+          date='August 2013 - June 2017'
+          href='https://www.hfut.edu.cn/index.htm'
+        >
+          <img
+            class='absolute end-4.8 z-0 m-0 -my-3 h-full w-4/9 object-cover opacity-40'
+            src='/images/hfut.png'
+          />
         </Card>
       </Section>
 
