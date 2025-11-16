@@ -1,0 +1,145 @@
+---
+title: 3234. 统计 1 显著的字符串的数量
+publishDate: 2024-07-28
+description: '应用题目条件中的平方信息，通过开平方把时间复杂度降低半个维度'
+tags:
+  - enumeration
+  - sliding window
+  - medium
+language: '中文'
+---
+
+import { Card } from 'astro-pure/user'
+
+## 题目
+<Card
+  as='a'
+  href='#card'
+  heading='3234. Count the Number of Substrings With Dominant Ones'
+  subheading='Medium, Enumeration, Sliding window'
+  href='https://leetcode.com/problems/count-the-number-of-substrings-with-dominant-ones/description/'
+>
+</Card>
+
+这道题的目标是计算一个二进制字符串 `s` 中所有“支配性”子字符串的数量。一个子字符串被称为“支配性”的，当且仅当它包含的 '1' 的数量 **大于或等于** '0' 的数量的平方。
+
+即：$count('1') >= count('0') * count('0')$
+
+## 解题思路
+
+一个朴素的解法是使用两层循环遍历所有的子字符串 $s[i...j]$，在内层循环中维护 '1' 和 '0' 的计数，并检查它们是否满足支配性条件。
+
+```java
+// 朴素的 O(N^2) 解法，在 N 较大时会超时
+long count = 0;
+int n = s.length();
+for (int i = 0; i < n; i++) {
+    int ones = 0;
+    int zeros = 0;
+    for (int j = i; j < n; j++) {
+        if (s.charAt(j) == '1') {
+            ones++;
+        } else {
+            zeros++;
+        }
+        if (ones >= zeros * zeros) {
+            count++;
+        }
+    }
+}
+return count;
+```
+
+-----
+
+## 优化：O(N \* sqrt(N))
+
+我们来分析一下约束条件：$ones >= zeros * zeros$。
+
+  * $n$ 是字符串 $s$ 的长度。
+  * 对于任何子字符串，$ones$ 的数量**最多**为 $n$（当子字符串长度为 $n$ 且全是 $1$ 时）。
+  * 因此，如果一个子字符串要满足 $ones >= zeros * zeros$，就必须满足 $n >= zeros * zeros$。
+  * 这意味着 $sqrt(n) >= zeros$。
+
+**关键洞察：**
+如果一个子字符串中 '0' 的数量 `zeros` 超过了 `floor(sqrt(n))`，那么 `zeros * zeros` 必然会大于 `n`。
+（*证明：令 $k = floor(sqrt(n))$。如果 $zeros > k$，则 $zeros >= k + 1$。由于 $k <= sqrt(n) < k + 1$，两边平方得到 $k^2 <= n < (k + 1)^2$。因此，$zeros * zeros >= (k + 1)^2 > n$。*）
+
+既然 $ones$ 的数量永远不可能超过 $n$，那么当 $zeros * zeros > n$ 时，$ones >= zeros * zeros$ 这个条件就**永远无法满足**。
+
+所以，我们只需要考虑那些 $0$ 的数量 $zeros$ **小于或等于** $floor(sqrt(n))$ 的子字符串。
+
+我们可以利用这个洞察来优化朴素的 $O(N^2)$ 解法：
+
+1.  在外层循环中，我们仍然遍历所有可能的起始位置 $i$。
+2.  在内层循环中，我们遍历结束位置 $j$（从 $i$ 开始），同时维护 $ones$ 和 $zeros$ 的计数。
+3.  我们计算一个 $maxZeros = (int) Math.sqrt(n)$。
+4.  在内层循环中，一旦 $zeros$ 的数量**超过了 $maxZeros$**，我们就可以**立即
+    break 内层循环**。因为从这个点 $j$ 开始，任何更长的子字符串（$s[i...k]$ 其中 $k > j$）的 $zeros$ 数量只会更多（或不变），$zeros * zeros$ 将永远大于 $n$，不可能再满足支配性条件。
+
+## 复杂度分析
+
+  * **时间复杂度：** $O(N * sqrt(N))$
+      * 外层循环 $i$ 运行 $N$ 次。
+      * 内层循环 $j$ 在 $zeros$ 超过 $sqrt(N)$ 时就会停止。在最坏的情况下（例如，字符串全是 $0$），内层循环最多运行 $sqrt(N) + 1$ 次。因此，总时间复杂度为 $O(N * sqrt(N))$。
+      * 给定 $N$ 的约束（例如 40000），$N * sqrt(N)$ 大约是 $40000 * 200 = 8,000,000$，这个计算量是完全可以通过的。
+  * **空间复杂度：** $O(1)$
+      * 我们只使用了几个变量来存储计数。
+
+## Java 代码实现
+
+```java
+class Solution {
+    public long countSubstrings(String s) {
+        int n = s.length();
+        if (n == 0) {
+            return 0;
+        }
+
+        long dominantCount = 0;
+
+        // 关键优化：
+        // 支配性条件为 ones >= zeros * zeros
+        // 因为 ones <= n，所以我们必须有 n >= zeros * zeros，即 sqrt(n) >= zeros
+        // 如果 zeros > sqrt(n)，则 zeros * zeros > n，此时条件永远无法满足。
+        // 我们只需要检查 zeros <= sqrt(n) 的情况。
+        int maxZeros = (int) Math.sqrt(n);
+
+        // 外层循环：遍历所有子字符串的起始点 i
+        for (int i = 0; i < n; i++) {
+            
+            int ones = 0;
+            int zeros = 0;
+
+            // 内层循环：遍历所有子字符串的结束点 j
+            for (int j = i; j < n; j++) {
+                
+                // 更新当前子字符串 s[i...j] 的 ones 和 zeros 计数
+                if (s.charAt(j) == '1') {
+                    ones++;
+                } else {
+                    zeros++;
+                }
+
+                // 优化：
+                // 如果 '0' 的数量已经超过了 sqrt(n)，
+                // 那么 s[i...j] 以及所有 s[i...k] (k > j) 都不可能满足条件。
+                // 我们可以直接跳出内层循环，开始下一个 i。
+                if (zeros > maxZeros) {
+                    break;
+                }
+
+                // 检查支配性条件
+                // 注意：因为 zeros <= maxZeros，所以 zeros * zeros 不会溢出 int
+                if (ones >= zeros * zeros) {
+                    dominantCount++;
+                }
+            }
+        }
+
+        return dominantCount;
+    }
+}
+```
+
+这个 $O(N * sqrt(N))$ 的解决方案是解决此题的正确且高效的方法。
