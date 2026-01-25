@@ -3,7 +3,8 @@ title: Java 的逃逸分析机制
 publishDate: 2023-07-25 08:00:00
 description: '分析对象作用域识别没有逃逸出当前方法的对象，做激进优化，减少垃圾回收的压力，提升性能。'
 tags:
-  - java,jvm
+  - java
+  - jvm
 language: '中文'
 ---
 
