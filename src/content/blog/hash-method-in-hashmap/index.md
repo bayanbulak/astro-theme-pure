@@ -3,7 +3,8 @@ title: 详解 HashMap 的 hash() 方法
 publishDate: 2023-05-02 08:00:00
 description: 'hash() 方法叫做扰动函数，把 hashCode 的高 16 位异或到低 16 位，让高位也参与桶下标的运算。因为 HashMap 初始容量只有 16，(n-1) & hash 只能用到 hashCode 的低 4 位，高位信息会被浪费。这样做能在 hashCode 分布不够散列时，降低冲突概率。'
 tags:
-  - Java,HashMap
+  - Java
+  - Hashmap
 heroImage: { src: './chaining.webp', color: '#B4C6DA' }
 language: '中文'
 ---
