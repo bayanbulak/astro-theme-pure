@@ -9,7 +9,6 @@ import PageLayout from '@/layouts/BaseLayout.astro'
 import ProjectCard from '@/components/home/ProjectCard.astro'
 import Section from '@/components/home/Section.astro'
 import SkillLayout from '@/components/home/SkillLayout.astro'
-import avatar from '@/assets/avatar.png'
 import config from '@/site-config'
 
 const languages = ['Java', 'Python', 'JavaScript', 'Html', 'Shell']
@@ -19,6 +18,15 @@ const backend = ['SpringBoot', 'MySQL', 'Redis', 'MyBatis']
 const MAX_POSTS = 10
 const allPosts = await getBlogCollection()
 const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
+
+const imagePath = config.logo.src
+const images = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/*.{jpeg,jpg,png,gif,avif,webp}'
+)
+if (!images[imagePath])
+  throw new Error(
+    `"${imagePath}" does not exist in glob: "src/assets/*.{jpeg,jpg,png,gif,avif,webp}"`
+  )
 ---
 
 <PageLayout meta={{ title: 'Home' }} highlightColor='#659EB9'>
@@ -30,10 +38,11 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
         alt='profile'
         class='h-28 w-auto rounded-full border p-1'
         loading='eager'
+        fetchpriority='high'
       />
 
       <div class='flex flex-col items-center gap-y-4'>
-        <h1 class='text-3xl font-bold'>{config.author}</h1>
+        <h1 class='text-3xl font-medium'>{config.author}</h1>
         <div class='flex flex-wrap justify-center gap-x-7 gap-y-3'>
           <Label title='Shanghai, China'>
             <Icon name='location' class='size-5' slot='icon' />
@@ -159,7 +168,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
             href='/projects'
             heading='More projects'
             subheading='Check out more projects'
-            imagePath='/src/assets/projects/wen-qiao-g_w8I64FiO0-unsplash.jpg'
+            imagePath='/src/assets/projects/4.avif'
           />
         </div>
       </Section>

@@ -26,8 +26,21 @@ const { class: className } = Astro.props
   const walineConfig = config.integ.waline
 
   class Comment extends HTMLElement {
-    constructor() {
-      super()
+    private initialized = false
+
+    private initWaline() {
+      if (this.initialized) return
+      this.initialized = true
+      const emoji = walineConfig.emoji?.map(
+        (preset) => `${config.npmCDN}/@waline/emojis@1.2.0/${preset}` as WalineEmojiPresets
+      )
+      walineInit({
+        el: 'comment-component #waline',
+        serverURL: walineConfig.server || '',
+        emoji,
+        reaction: ['/icons/heart-item.svg'],
+        ...walineConfig.additionalConfigs,
+      })
     }
 
     connectedCallback() {
@@ -38,22 +51,34 @@ const { class: className } = Astro.props
         globalThis as unknown as { __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: boolean }
       ).__VUE_PROD_HYDRATION_MISMATCH_DETAILS__ = false
 
-      const emoji = walineConfig.emoji?.map(
-        (preset) => `${config.npmCDN}/@waline/emojis@1.2.0/${preset}` as WalineEmojiPresets
-      )
+      const container = this.querySelector('#waline')
+      if (!container) return
 
-      walineInit({
-        el: '#waline',
-        serverURL: walineConfig.server || '',
-        emoji,
-        reaction: ['/icons/heart-item.svg'],
-        ...walineConfig.additionalConfigs
-      })
+      if (typeof IntersectionObserver === 'undefined') {
+        setTimeout(() => this.initWaline(), 800)
+        return
+      }
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((entry) => entry.isIntersecting)) {
+            observer.disconnect()
+            this.initWaline()
+          }
+        },
+        { rootMargin: '200px' }
+      )
+      observer.observe(container)
     }
   }
 
   if (walineConfig.enable) customElements.define('comment-component', Comment)
 </script>
+
+{
+  !config.integ.waline.showMeta &&(
+    <style> #waline :global(.wl-meta) { display: none; } </style>
+  )
+}
 
 <style>
   /* Basic theme */
@@ -95,19 +120,13 @@ const { class: className } = Astro.props
   }
 
   /* Fix long text and links overflow */
-  #waline :global(.wl-content, .wl-text, .wl-comment-text, .wl-item, .wl-card-item, a) {
+  #waline :global(.wl-content, .wl-text, .wl-comment-text, .wl-item, .wl-card-item) {
     max-width: 100%;
   }
   #waline :global(.wl-meta, .wl-content, .wl-text, .wl-comment-text) {
     word-wrap: break-word;
     word-break: break-word;
     overflow-wrap: anywhere;
-  }
-  #waline :global(a) {
-    display: inline-block;
-  }
-  #waline :global(.wl-item, .wl-card-item) {
-    overflow: hidden;
   }
 
   /* Reaction buttons */
@@ -147,7 +166,6 @@ const { class: className } = Astro.props
     background: var(--waline-theme-color);
     color: var(--waline-bg-color);
   }
-
   #waline :global(.wl-reaction-votes:after) {
     margin-left: 0.25em;
     content: 'Like(s)';

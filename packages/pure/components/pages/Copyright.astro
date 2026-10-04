@@ -1,5 +1,6 @@
 ---
 import type { CollectionKey, InferEntrySchema } from 'astro:content'
+
 import config from 'virtual:config'
 
 import { cn, getFormattedDate } from '../../utils'
@@ -11,10 +12,9 @@ interface Props<T extends CollectionKey> {
   class?: string
 }
 
-const {
-  data: { heroImage, title, publishDate },
-  class: className
-} = Astro.props
+const { data, class: className } = Astro.props
+const { title, publishDate } = data
+const heroImage = 'heroImage' in data ? data.heroImage : undefined
 
 const image = typeof heroImage?.src === 'string' ? heroImage?.src : (heroImage?.src?.src ?? '')
 
@@ -42,7 +42,7 @@ const shares = {
   {/* title & link */}
   <div class='flex flex-col'>
     <div class='font-medium text-foreground'>{title}</div>
-    <div class='text-sm'>{Astro.url}</div>
+    <div class='text-sm line-clamp-1'>{Astro.url}</div>
   </div>
 
   {/* common info */}
@@ -80,12 +80,14 @@ const shares = {
     <div class='flex flex-row gap-3'>
       <button
         id='copy-link'
+        aria-label='Copy link'
         class='group rounded-full bg-muted p-1 text-muted-foreground transition-colors hover:text-primary sm:p-1.5'
       >
         <Icon class='size-5' name='link' />
       </button>
       <button
         id='get-qrcode'
+        aria-label='Get QR code'
         class='group rounded-full bg-muted p-1 text-muted-foreground transition-colors hover:text-primary sm:p-1.5'
       >
         <Icon class='size-5' name='qrcode' />
@@ -96,6 +98,7 @@ const shares = {
             href={shares[share].link}
             target='_blank'
             id={`share-${share}`}
+            aria-label={`Share to ${share}`}
             class='group rounded-full bg-muted p-1 text-muted-foreground transition-colors hover:text-primary sm:p-1.5'
           >
             <Icon class='size-5' name={share} />
@@ -123,7 +126,7 @@ const shares = {
 <style>
   #qrcode-container.expanded {
     max-height: 11rem;
-    transform: translateY(4px);
+    transform: translateY(6px);
     opacity: 100;
   }
 </style>

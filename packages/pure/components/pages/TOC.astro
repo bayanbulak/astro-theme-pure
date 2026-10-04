@@ -16,8 +16,8 @@ const toc = generateToc(headings)
 ---
 
 <toc-heading class={className} {...props}>
-  <h2 class='font-semibold'>TABLE OF CONTENTS</h2>
-  <ul class='mt-4 text-card-foreground'>
+  <h2 class='font-medium'>TABLE OF CONTENTS</h2>
+  <ul class='mt-4'>
     {toc.map((heading) => <TOCHeading heading={heading} />)}
   </ul>
 </toc-heading>
@@ -45,10 +45,11 @@ const toc = generateToc(headings)
 
     constructor() {
       super()
-
       // Initialize the headings and tocLinks
       this.headings = Array.from(
-        document.querySelectorAll('article h2, article h3, article h4, article h5, article h6')
+        document.querySelectorAll(
+          'article h1, article h2, article h3, article h4, article h5, article h6'
+        )
       )
       this.tocLinks = Array.from(this.querySelectorAll('a[href^="#"]')).map((link) => ({
         element: link as HTMLAnchorElement,
@@ -82,15 +83,15 @@ const toc = generateToc(headings)
           el.classList.toggle('highlight-bg-translucent', inView)
           el.classList.toggle(
             'rounded-t-2xl',
-            inView && (i == 0 || !this.headingProgress[this.tocLinks[i - 1]?.slug].inView)
+            inView && (i === 0 || !this.headingProgress[this.tocLinks[i - 1]?.slug].inView)
           )
           el.classList.toggle(
             'rounded-b-2xl',
             inView &&
-              (i == this.tocLinks.length - 1 ||
+              (i === this.tocLinks.length - 1 ||
                 !this.headingProgress[this.tocLinks[i + 1]?.slug].inView)
           )
-          bar.classList.toggle('is-read', !inView && progress == 1)
+          bar.classList.toggle('is-read', !inView && progress === 1)
           bar.classList.toggle('highlight-bg', inView)
           bar.style.setProperty('height', `${progress * 90}%`)
         }

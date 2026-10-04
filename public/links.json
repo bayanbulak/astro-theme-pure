@@ -14,7 +14,7 @@
           "name": "CWorld Site",
           "intro": "求知若愚，虚怀若谷",
           "link": "https://cworld0.com/",
-          "avatar": "https://cravatar.cn/avatar/1ffe42aa45a6b1444a786b1f32dfa8aa?s=200"
+          "avatar": "https://gravatar.loli.net/avatar/1ffe42aa45a6b1444a786b1f32dfa8aa?s=200"
         }
       ]
     },
@@ -28,16 +28,10 @@
       "desc": "Other special links",
       "link_list": [
         {
-          "name": "虫洞",
-          "intro": "随机前往十年之约的成员博客",
-          "link": "https://www.foreverblog.cn/go.html",
-          "avatar": "/images/wormhole.png"
-        },
-        {
-          "name": "开往",
-          "intro": "随机前往开往的成员博客",
-          "link": "https://www.travellings.cn/go.html",
-          "avatar": "https://www.travellings.cn/assets/travelling.png"
+          "name": "Astro",
+          "intro": "The web framework for content-driven websites",
+          "link": "https://astro.build/",
+          "avatar": "https://avatars.githubusercontent.com/u/44914786?s=200&v=4"
         }
       ]
     }

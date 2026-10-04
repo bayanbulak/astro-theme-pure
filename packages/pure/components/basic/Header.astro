@@ -8,7 +8,7 @@ import { Icon } from '../user'
   class='group sticky top-4 z-50 max-md:z-30 mb-12 flex items-center justify-between rounded-xl border border-transparent max-sm:py-1 sm:rounded-2xl'
 >
   <a
-    class='z-30 text-xl font-semibold group-[.not-top]:ms-2 sm:group-[.not-top]:ms-3'
+    class='z-30 text-xl font-medium group-[.not-top]:ms-2 sm:group-[.not-top]:ms-3'
     style='transition:margin-inline 0.3s'
     href='/'
     aria-label='Brand'>{config.title}</a
@@ -27,6 +27,7 @@ import { Icon } from '../user'
               href={item.link}
               class='w-full flex-none grow py-2 text-right font-medium transition-none hover:text-primary sm:w-fit sm:px-3'
               aria-label='Nav menu item'
+              data-astro-prefetch
             >
               {item.title}
             </a>
@@ -73,11 +74,7 @@ import { Icon } from '../user'
 <script>
   import { setTheme, showToast } from '../../utils'
 
-  class Header extends HTMLElement {
-    constructor() {
-      super()
-    }
-
+  class HeaderComponent extends HTMLElement {
     connectedCallback() {
       // Header
       let preScrollY = window.scrollY
@@ -108,7 +105,7 @@ import { Icon } from '../user'
     }
   }
 
-  customElements.define('header-component', Header)
+  customElements.define('header-component', HeaderComponent)
 </script>
 
 <style>
